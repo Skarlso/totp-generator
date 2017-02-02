@@ -46,28 +46,28 @@ string generateOTPToken(string token, std::time_t t) {
     }
     // string decoded = base64_decode(token);
     // printf("decoded: %s\n", decoded.c_str());
-    unsigned int data[8];
-    data[0] = (unsigned int)(timer >> 56);
-    data[1] = (unsigned int)(timer >> 48);
-    data[2] = (unsigned int)(timer >> 40);
-    data[3] = (unsigned int)(timer >> 32);
-    data[4] = (unsigned int)(timer >> 24);
-    data[5] = (unsigned int)(timer >> 16);
-    data[6] = (unsigned int)(timer >> 8);
-    data[7] = (unsigned int)(timer);
+    unsigned char data[8];
+    data[0] = (unsigned char)(timer >> 56);
+    data[1] = (unsigned char)(timer >> 48);
+    data[2] = (unsigned char)(timer >> 40);
+    data[3] = (unsigned char)(timer >> 32);
+    data[4] = (unsigned char)(timer >> 24);
+    data[5] = (unsigned char)(timer >> 16);
+    data[6] = (unsigned char)(timer >> 8);
+    data[7] = (unsigned char)(timer);
     // switchBigEndian(&data, timer);
     printf("data length: %zu\n", sizeof(data));
     printf("data:");
     for (int i = 0; i < sizeof(data); ++i)
     {
-        printf("%d,", (unsigned int)data[i]);
+        printf("%d,", (unsigned char)data[i]);
     }
     printf("\n");
     unsigned char* digest = nullptr;
 
     printf("secretBytes length: %lu\n", secretBytes.length());
     printf("data length: %lu\n", sizeof(data));
-    digest = HMAC(EVP_sha1(), secretBytes.c_str(), strlen(secretBytes.c_str()), (unsigned char*)data, sizeof(data), nullptr, nullptr);
+    digest = HMAC(EVP_sha1(), secretBytes.c_str(), strlen(secretBytes.c_str()), data, sizeof(data), nullptr, nullptr);
     // digest = HMAC(EVP_sha1(), "key", strlen("key"), (unsigned char*)"data", strlen("data"), NULL, NULL);
     char mdString[20];
     for(int i = 0; i < 20; i++)
