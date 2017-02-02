@@ -31,7 +31,7 @@ using std::string;
 // }
 //
 string generateOTPToken(string token, std::time_t t) {
-    int64_t timer = ((int64_t)(floor(t/30)));
+    uint64_t timer = ((uint64_t)(floor(t/30)));
     string secretBytes;
     CryptoPP::Base64Decoder decoder;
 
@@ -46,28 +46,28 @@ string generateOTPToken(string token, std::time_t t) {
     }
     // string decoded = base64_decode(token);
     // printf("decoded: %s\n", decoded.c_str());
-    unsigned char data[8];
-    data[0] = (unsigned char)(timer >> 56);
-    data[1] = (unsigned char)(timer >> 48);
-    data[2] = (unsigned char)(timer >> 40);
-    data[3] = (unsigned char)(timer >> 32);
-    data[4] = (unsigned char)(timer >> 24);
-    data[5] = (unsigned char)(timer >> 16);
-    data[6] = (unsigned char)(timer >> 8);
-    data[7] = (unsigned char)(timer);
+    unsigned int data[8];
+    data[0] = (unsigned int)(timer >> 56);
+    data[1] = (unsigned int)(timer >> 48);
+    data[2] = (unsigned int)(timer >> 40);
+    data[3] = (unsigned int)(timer >> 32);
+    data[4] = (unsigned int)(timer >> 24);
+    data[5] = (unsigned int)(timer >> 16);
+    data[6] = (unsigned int)(timer >> 8);
+    data[7] = (unsigned int)(timer);
     // switchBigEndian(&data, timer);
     printf("data length: %zu\n", sizeof(data));
     printf("data:");
     for (int i = 0; i < sizeof(data); ++i)
     {
-        printf("%d,", (unsigned char)data[i]);
+        printf("%d,", (unsigned int)data[i]);
     }
     printf("\n");
     unsigned char* digest = nullptr;
 
     printf("secretBytes length: %lu\n", secretBytes.length());
     printf("data length: %lu\n", sizeof(data));
-    digest = HMAC(EVP_sha1(), secretBytes.c_str(), strlen(secretBytes.c_str()), data, sizeof(data), nullptr, nullptr);
+    digest = HMAC(EVP_sha1(), secretBytes.c_str(), strlen(secretBytes.c_str()), (unsigned char*)data, sizeof(data), nullptr, nullptr);
     // digest = HMAC(EVP_sha1(), "key", strlen("key"), (unsigned char*)"data", strlen("data"), NULL, NULL);
     char mdString[20];
     for(int i = 0; i < 20; i++)
@@ -76,16 +76,16 @@ string generateOTPToken(string token, std::time_t t) {
     for (int i = 0; i < 20; i++)
         printf("%d,", (int)digest[i]);
     printf("digest:%s\n", digest);
-    int offset = digest[strlen((char*)digest)-1] & 0xf;
-    printf("offset: %d\n", offset);
-	int64_t value = (int64_t)(((int(digest[offset]) & 0x7f) << 24) |
-		((int(digest[offset+1] & 0xff)) << 16) |
-		((int(digest[offset+2] & 0xff)) << 8) |
-		(int(digest[offset+3]) & 0xff));
-    printf("value: %lld\n", value);
+    uint64_t offset = digest[strlen((char*)digest)-1] & 0xf;
+    printf("offset: %llu\n", offset);
+	uint64_t value = (uint64_t)(((uint64_t(digest[offset]) & 0x7f) << 24) |
+		((uint64_t(digest[offset+1] & 0xff)) << 16) |
+		((uint64_t(digest[offset+2] & 0xff)) << 8) |
+		(uint64_t(digest[offset+3]) & 0xff));
+    printf("value: %llu\n", value);
     int len = 6;
-    int mod = int(value % int(pow(10, len)));
-    printf("%d", mod);
+    uint64_t mod = value % uint64_t(pow(10, len));
+    printf("%llu", mod);
     return std::to_string(mod);
 }
 
