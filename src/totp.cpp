@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cryptopp/base64.h>
+#include <algorithm>
 
 using std::string;
 
@@ -16,7 +17,7 @@ string generateOTPToken(string token, std::time_t t) {
     string secretBytes;
     CryptoPP::Base64Decoder decoder;
 
-    decoder.Put( (byte*)token.data(), token.length() );
+    decoder.Put((byte*)token.data(), token.length());
     decoder.MessageEnd();
 
     CryptoPP::word64 size = decoder.MaxRetrievable();
@@ -25,6 +26,21 @@ string generateOTPToken(string token, std::time_t t) {
         secretBytes.resize(size);
         decoder.Get((byte*)secretBytes.data(), secretBytes.length());
     }
+    secretBytes.erase(std::remove(secretBytes.begin(), secretBytes.end(), '\n'), secretBytes.end());
+    unsigned char key[1024];
+    printf("OTP: %s\n", secretBytes.c_str());
+    for(int i = 0; i < secretBytes.length(); i++)
+        key[i] = (unsigned char)secretBytes[i];
+
+    printf("key:");
+    int keylength = 0;
+    for(int i = 0; key[i] != '\0'; i++) {
+        printf("%c", key[i]);
+        keylength++;
+    }
+
+    printf("\n");
+
     unsigned char data[8];
     data[0] = (unsigned char)(timer >> 56);
     data[1] = (unsigned char)(timer >> 48);
@@ -36,7 +52,12 @@ string generateOTPToken(string token, std::time_t t) {
     data[7] = (unsigned char)(timer);
     unsigned char* digest = nullptr;
 
-    digest = HMAC(EVP_sha1(), secretBytes.c_str(), strlen(secretBytes.c_str()), (unsigned char*)data, sizeof(data), nullptr, nullptr);
+    digest = HMAC(EVP_sha1(), key, keylength, (unsigned char*)data, sizeof(data), nullptr, nullptr);
+    char mdString[41];
+    for(int i = 0; i < 20; i++)
+        sprintf(&mdString[i*2], "%02x", (unsigned char)digest[i]);
+    printf("mdString: %s\n", mdString);
+
     int offset = digest[strlen((char*)digest)-1] & 0xf;
 	int value = (int)(((int(digest[offset]) & 0x7f) << 24) |
 		((int(digest[offset+1] & 0xff)) << 16) |
