@@ -1,2 +1,4 @@
 *.o
 bin/totp
+*.swp
+.DS_Store

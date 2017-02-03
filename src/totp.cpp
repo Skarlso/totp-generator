@@ -6,29 +6,45 @@
 #include <ctime>
 #include <cmath>
 #include <cstdlib>
-#include <cryptopp/base64.h>
+#include <cryptopp/base32.h>
 #include <algorithm>
 
 using std::string;
 
-string generateOTPToken(string token, std::time_t t) {
-    uint64_t timer = (uint64_t)(floor(t/30));
-    printf("timer: %llu\n", timer);
-    string secretBytes;
-    CryptoPP::Base64Decoder decoder;
+string decodeBase32(string token) {
+    string secret;
+    int lookup[256];
+    const byte ALPHABET[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    CryptoPP::Base32Decoder::InitializeDecodingLookupArray(lookup, ALPHABET, 32, true);
 
+    CryptoPP::Base32Decoder decoder;
+    CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::DecodingLookupArray(),(const int *)lookup);
+    decoder.IsolatedInitialize(params);
     decoder.Put((byte*)token.data(), token.length());
     decoder.MessageEnd();
 
     CryptoPP::word64 size = decoder.MaxRetrievable();
     if(size && size <= SIZE_MAX)
     {
-        secretBytes.resize(size);
-        decoder.Get((byte*)secretBytes.data(), secretBytes.length());
+        secret.resize(size);
+        decoder.Get((byte*)secret.data(), secret.length());
     }
+    return secret;
+}
+
+
+string generateOTPToken(string token, std::time_t t) {
+    uint64_t timer = (uint64_t)(floor(t/30));
+    printf("timer: %llu\n", timer);
+    string secretBytes = decodeBase32(token);
+     // Decoder
     secretBytes.erase(std::remove(secretBytes.begin(), secretBytes.end(), '\n'), secretBytes.end());
     unsigned char key[1024];
-    printf("OTP: %s\n", secretBytes.c_str());
+    printf("OTP Transalted: ");
+    for(int i = 0; i < secretBytes.length(); i++) {
+        printf("%c", secretBytes[i]);
+    }
+    printf("\n");
     for(int i = 0; i < secretBytes.length(); i++)
         key[i] = (unsigned char)secretBytes[i];
 
