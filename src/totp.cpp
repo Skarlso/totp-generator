@@ -40,22 +40,21 @@ string generateOTPToken(string token, std::time_t t) {
      // Decoder
     secretBytes.erase(std::remove(secretBytes.begin(), secretBytes.end(), '\n'), secretBytes.end());
     unsigned char key[1024];
-    printf("OTP Transalted: ");
-    for(int i = 0; i < secretBytes.length(); i++) {
-        printf("%c", secretBytes[i]);
-    }
-    printf("\n");
+    //printf("OTP Transalted: ");
+    //for(int i = 0; i < secretBytes.length(); i++) {
+    //    printf("%c", secretBytes[i]);
+    //}
+    //printf("\n");
     for(int i = 0; i < secretBytes.length(); i++)
         key[i] = (unsigned char)secretBytes[i];
 
-    printf("key:");
+    //printf("key:");
     int keylength = 0;
     for(int i = 0; key[i] != '\0'; i++) {
-        printf("%c", key[i]);
         keylength++;
     }
 
-    printf("\n");
+    //printf("\n");
 
     unsigned char data[8];
     data[0] = (unsigned char)(timer >> 56);
