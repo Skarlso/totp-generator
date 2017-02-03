@@ -28,6 +28,11 @@ This generator is in full compliance to the RFC described here: [RFC-6238](https
 export OPENSSL_INCLUDE_DIR=/usr/local/Cellar/openssl/1.0.2j/include
 export OPENSSL_LIB_DIR=/usr/local/Cellar/openssl/1.0.2j/lib
 ```
+Alternatively:
+
+```bash
+cmake -DOPENSSL_INCLUDE_DIR=/usr/local/Cellar/openssl/1.0.2j/include -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2j/ ..
+```
 
 ## Building
 
