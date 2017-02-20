@@ -11,6 +11,5 @@ include_directories(${OPENSSL_INCLUDE_DIR})
 message(STATUS "OPENSSL INCLUDE DIR:" ${OPENSSL_INCLUDE_DIR})
 message(STATUS "OPENSSL VERSION:" ${OPENSSL_VERSION})
 message(STATUS "OPENSSL ROOT DIR:" ${OPENSSL_ROOT_DIR})
-add_executable(totp src/totp.cpp)
+add_executable(totp src/totp.cpp src/generator.cpp)
 target_link_libraries(totp cryptopp ${OPENSSL_LIBRARIES})
-

@@ -2,3 +2,5 @@
 bin/totp
 *.swp
 .DS_Store
+tags*
+.tags*
