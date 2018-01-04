@@ -36,7 +36,7 @@ string TokenGenerator::decodeBase32(string token) {
 
 string TokenGenerator::generateOTPToken(string token, std::time_t t) {
     uint64_t timer = (uint64_t)(floor(t/30));
-    printf("timer: %llu\n", timer);
+    // printf("timer: %llu\n", timer);
     token.erase(std::remove(token.begin(), token.end(), '\n'), token.end());
     string secretBytes = TokenGenerator::decodeBase32(token);
      // Decoder
@@ -66,7 +66,7 @@ string TokenGenerator::generateOTPToken(string token, std::time_t t) {
     char mdString[41];
     for(int i = 0; i < 20; i++)
         sprintf(&mdString[i*2], "%02x", (unsigned char)digest[i]);
-    printf("mdString: %s\n", mdString);
+    // printf("mdString: %s\n", mdString);
 
     int offset = digest[strlen((char*)digest)-1] & 0xf;
 	int value = (int)(((int(digest[offset]) & 0x7f) << 24) |
