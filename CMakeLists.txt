@@ -2,8 +2,8 @@ cmake_minimum_required (VERSION 2.8.8)
 
 project (totp-generator)
 
-set (CMAKE_CXX_STANDARD 14)
-set (CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX11_ABI=0")
+set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX17_ABI=0")
 set (CPACK_GENERATOR "TGZ")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -18,3 +18,4 @@ link_libraries(commander)
 add_subdirectory("totp")
 # add_subdirectory("tests")
 include_directories("totp")
+include(CPack)

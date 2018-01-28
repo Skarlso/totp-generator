@@ -8,6 +8,14 @@
 namespace Commands {
     void GenerateCommand::Execute(Commander::ArgumentRegistry* args)
     {
+        std::string account = args->SubCommand();
+        if (account.empty()) {
+            printf("Please provide an account in the format of namespace.account.");
+            return;
+        }
+
+
+
         TokenGenerator tg;
         std::time_t timer = std::time(nullptr);
         if(const char* env_p = std::getenv("OTP_TOKEN")) {
