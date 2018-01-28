@@ -8,6 +8,10 @@ using std::string;
 
 int main()
 {
+    // Use the command library from Yitsushi?
+    // command -> create
+    // command -> generate
+    // command -> delete
     TokenGenerator tg;
     std::time_t timer = std::time(nullptr);
     if(const char* env_p = std::getenv("OTP_TOKEN")) {
