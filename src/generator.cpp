@@ -16,20 +16,20 @@ using std::string;
 string TokenGenerator::decodeBase32(string token) {
     string secret;
     int lookup[256];
-    const byte ALPHABET[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    const CryptoPP::byte ALPHABET[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     CryptoPP::Base32Decoder::InitializeDecodingLookupArray(lookup, ALPHABET, 32, true);
 
     CryptoPP::Base32Decoder decoder;
     CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::DecodingLookupArray(),(const int *)lookup);
     decoder.IsolatedInitialize(params);
-    decoder.Put((byte*)token.data(), token.length());
+    decoder.Put((CryptoPP::byte*)token.data(), token.length());
     decoder.MessageEnd();
 
     CryptoPP::word64 size = decoder.MaxRetrievable();
     if(size && size <= SIZE_MAX)
     {
         secret.resize(size);
-        decoder.Get((byte*)secret.data(), secret.length());
+        decoder.Get((CryptoPP::byte*)secret.data(), secret.length());
     }
     return secret;
 }
