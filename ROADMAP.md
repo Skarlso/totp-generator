@@ -1,6 +1,6 @@
 # ROADMAP
 
-- Convert everything to cmake
+~~~- Convert everything to cmake~~~
 - Add multiple token handling and selection
 - Add configurable time intervalls
 - Add the ability to select methods
