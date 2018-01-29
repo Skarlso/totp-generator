@@ -1,0 +1,1 @@
+// Encrypt the file with a salt using a password.

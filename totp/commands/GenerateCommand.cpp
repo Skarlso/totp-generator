@@ -4,6 +4,7 @@
 #include <Commander/CommandDescriptor.hpp>
 #include "GenerateCommand.hpp"
 #include "../generator.hpp"
+#include "../accounting.hpp"
 
 namespace Commands {
     void GenerateCommand::Execute(Commander::ArgumentRegistry* args)
@@ -13,17 +14,16 @@ namespace Commands {
             printf("Please provide an account in the format of namespace.account.");
             return;
         }
-
-
+        Accounting::Accounting* accounting = new Accounting::Accounting();
+        std::string token = accounting->retrieveToken(account);
+        if (token.empty()) {
+            printf("Could not find token for account: %s\n", account.c_str());
+            return;
+        }
 
         TokenGenerator tg;
         std::time_t timer = std::time(nullptr);
-        if(const char* env_p = std::getenv("OTP_TOKEN")) {
-            string token(env_p);
-            tg.generateOTPToken(token, timer);
-        } else {
-            printf("Please set your environment property 'OTP_TOKEN' to your token key.\n");
-        }
+        tg.generateOTPToken(token, timer);
     }
 
     Commander::CommandDescriptor* NewGenerateCommand(const std::string appName)

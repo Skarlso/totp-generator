@@ -8,13 +8,15 @@
 namespace Commands {
     void AddCommand::Execute(Commander::ArgumentRegistry* args)
     {
-        std::string account = args->SubCommand();
-        if (account.empty()) {
-            printf("Please provide an account in the format of namespace.account.");
-            return;
-        }
+        std::string account;
+        std::string token;
+        std::cout << "account:";
+        std::cin >> account;
+        std::cout << "token:";
+        std::cin >> token;
+
         Accounting::Accounting* acc = new Accounting::Accounting();
-        std::cout << "Adding new totp token" << std::endl;
+        acc->saveToken(account, token);
     }
 
     Commander::CommandDescriptor* NewAddCommand(const std::string appName)
