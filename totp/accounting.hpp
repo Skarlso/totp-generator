@@ -8,9 +8,9 @@
 class Accounting {
 public:
     Accounting();
-    std::string retrieveToken(std::string account);
-    void saveToken(std::string account, std::string token);
-    void deleteAccount(std::string account);
+    std::string retrieveToken(const std::string account);
+    void saveToken(const std::string account, const std::string token);
+    void deleteAccount(const std::string account);
 private:
     FileHandler *fileHandler;
     std::map<std::string, std::string> accounts;

@@ -14,6 +14,14 @@
 namespace fs = boost::filesystem;
 
 FileHandler::FileHandler() {
+    if(const char* env_p = std::getenv("TOTP_KEY")) {
+        std::string p(env_p);
+        password = p;
+    } else {
+        printf("Please set your environment property 'TOTP_KEY' to your totp password.\n");
+        exit(1);
+    }
+
     const char *homedir;
 
     if ((homedir = getenv("HOME")) == NULL) {
@@ -28,10 +36,6 @@ FileHandler::FileHandler() {
     }
     home /= CONFIG_FILE;
     if (stat (home.c_str(), &buffer) != 0) {
-        // Initate a file and set a password
-        std::cout << "Setting up first time password." << std::endl;
-        std::cout << "password:";
-        std::cin >> password;
         std::string content = "";
         Encrypt::Encrypt *encrypt = new Encrypt::Encrypt();
         std::string encryptedContent = encrypt->encrypt(content, password);
@@ -42,11 +46,7 @@ FileHandler::FileHandler() {
     configLocation = home;
 }
 
-void FileHandler::saveAccountFile(std::map<std::string, std::string> accountsToSave) {
-    if (password.empty()) {
-        std::cout << "password:";
-        std::cin >> password;
-    }
+void FileHandler::saveAccountFile(const std::map<std::string, std::string> accountsToSave) {
     std::ostringstream content;
     for (auto it = accountsToSave.begin(); it != accountsToSave.end(); ++it) {
         content << it->first << ":" << it->second << '\n';
@@ -61,10 +61,6 @@ void FileHandler::saveAccountFile(std::map<std::string, std::string> accountsToS
 }
 
 std::map<std::string, std::string> FileHandler::loadAccountFile() {
-    if (password.empty()) {
-        std::cout << "password:";
-        std::cin >> password;
-    }
     std::map<std::string, std::string> accounts;
     std::ifstream file(configLocation.c_str());
     std::stringstream buffer;

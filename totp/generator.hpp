@@ -3,14 +3,12 @@
 #include <string>
 #include <ctime>
 
-using std::string;
-
 class TokenGenerator {
 public:
     TokenGenerator(){};
-    string generateOTPToken(string token, std::time_t t);
+    std::string generateOTPToken(const std::string token, std::time_t t);
 private:
-    string decodeBase32(string token);
+    std::string decodeBase32(const std::string token);
 };
 
 #endif // TOKEN_GENERATOR_H

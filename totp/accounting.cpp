@@ -16,7 +16,7 @@ Accounting::Accounting() {
     fileHandler = new FileHandler::FileHandler();
 }
 
-std::string Accounting::retrieveToken(std::string account) {
+std::string Accounting::retrieveToken(const std::string account) {
     std::map<std::string, std::string> accounts = fileHandler->loadAccountFile();
     auto it = accounts.find(account);
     if (it == accounts.end()) {
@@ -25,7 +25,7 @@ std::string Accounting::retrieveToken(std::string account) {
     return it->second;
 }
 
-void Accounting::saveToken(std::string account, std::string token) {
+void Accounting::saveToken(const std::string account, const std::string token) {
     std::map<std::string, std::string> accounts = fileHandler->loadAccountFile();
     auto it = accounts.find(account);
     if (it != accounts.end()) {
@@ -37,7 +37,7 @@ void Accounting::saveToken(std::string account, std::string token) {
     std::cout << "Added new totp " << token << " to account " << account << std::endl;
 }
 
-void Accounting::deleteAccount(std::string account) {
+void Accounting::deleteAccount(const std::string account) {
     std::map<std::string, std::string> accounts = fileHandler->loadAccountFile();
     auto it = accounts.find(account);
     if (it == accounts.end()) {

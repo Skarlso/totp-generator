@@ -10,7 +10,7 @@ public:
     const std::string CONFIG_FILE = "accounts.txt";
     FileHandler();
     std::map<std::string, std::string> loadAccountFile();
-    void saveAccountFile(std::map<std::string, std::string> accountsToSave);
+    void saveAccountFile(const std::map<std::string, std::string> accountsToSave);
 private:
     boost::filesystem::path configLocation;
     std::string password = "";
