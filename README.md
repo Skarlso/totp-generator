@@ -1,5 +1,8 @@
 # TOTP Generator Implementation
 
+*DISCLAIMER*: Please don't use this in a production like environment. This is an experiment RFC Implementation in order to Learn
+only. Use this as a learning tool.
+
 A generator for TOTP based on RFC-6238.
 
 Original idea of implementing an RFC as a programming exercises by: [Yitsushi](https://github.com/Yitsushi).
