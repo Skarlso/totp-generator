@@ -1,4 +1,5 @@
 #include "accounting.hpp"
+#include "filehandler.hpp"
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
@@ -12,27 +13,11 @@
 namespace fs = boost::filesystem;
 
 Accounting::Accounting() {
-    const char *homedir;
-
-    if ((homedir = getenv("HOME")) == NULL) {
-        homedir = getpwuid(getuid())->pw_dir;
-    }
-    fs::path home;
-    home /= std::string(homedir);
-    home /= Accounting::CONFIG_FOLDER;
-    struct stat buffer;
-    if (stat (home.c_str(), &buffer) != 0) {
-        fs::create_directory(home);
-    }
-    home /= Accounting::CONFIG_FILE;
-    if (stat (home.c_str(), &buffer) != 0) {
-        std::ofstream outfile (home.c_str());
-    }
-    configLocation = home;
-    loadAccountFile();
+    fileHandler = new FileHandler::FileHandler();
 }
 
 std::string Accounting::retrieveToken(std::string account) {
+    std::map<std::string, std::string> accounts = fileHandler->loadAccountFile();
     auto it = accounts.find(account);
     if (it == accounts.end()) {
         return "";
@@ -41,33 +26,25 @@ std::string Accounting::retrieveToken(std::string account) {
 }
 
 void Accounting::saveToken(std::string account, std::string token) {
+    std::map<std::string, std::string> accounts = fileHandler->loadAccountFile();
     auto it = accounts.find(account);
     if (it != accounts.end()) {
         std::cout << "Account " << account << " already exists!" << std::endl;
         return;
     }
     accounts[account] = token;
-    saveAccountFile();
+    fileHandler->saveAccountFile(accounts);
     std::cout << "Added new totp " << token << " to account " << account << std::endl;
 }
 
-void Accounting::saveAccountFile() {
-    std::ofstream accFile (configLocation.c_str());
-    for (auto it = accounts.begin(); it != accounts.end(); ++it) {
-        accFile << it->first << ":" << it->second << '\n';
+void Accounting::deleteAccount(std::string account) {
+    std::map<std::string, std::string> accounts = fileHandler->loadAccountFile();
+    auto it = accounts.find(account);
+    if (it == accounts.end()) {
+        std::cout << "Account " << account << " not found!" << std::endl;
+        return;
     }
-    accFile.close();
-}
-
-void Accounting::loadAccountFile() {
-    std::ifstream file(configLocation.c_str());
-    std::string str;
-    while (std::getline(file, str)) {
-        char account[1024];
-        char token[1024];
-        std::sscanf(str.c_str(), "%[^:]:%s", account, token);
-        std::string acc(account);
-        std::string tok(token);
-        accounts[acc] = tok;
-    }
+    accounts.erase(it);
+    fileHandler->saveAccountFile(accounts);
+    std::cout << "Account " << account << " removed." << std::endl;
 }

@@ -15,7 +15,7 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/commands COMMANDS_SOURCES)
 link_libraries(commander)
 add_library(totp_object OBJECT ${COMMANDS_SOURCES})
 
-add_executable(totp totp.cpp accounting.cpp encrypt.cpp generator.cpp ${COMMANDS_SOURCES})
+add_executable(totp totp.cpp accounting.cpp encrypt.cpp generator.cpp filehandler.cpp ${COMMANDS_SOURCES})
 target_link_libraries(totp cryptopp ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
 
 install(TARGETS totp RUNTIME DESTINATION "${CMAKE_BINARY_DIR}/bin")

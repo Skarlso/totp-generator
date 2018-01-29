@@ -1,5 +1,5 @@
-#ifndef _AddCommand_hpp_
-#define _AddCommand_hpp_
+#ifndef _DeleteCommand_hpp_
+#define _DeleteCommand_hpp_
 
 #include <string>
 #include <Commander/Command.hpp>
@@ -8,11 +8,11 @@
 
 
 namespace Commands {
-    class AddCommand : public Commander::Command {
+    class DeleteCommand : public Commander::Command {
         void Execute(Commander::ArgumentRegistry* args);
     };
 
-    Commander::CommandDescriptor* NewAddCommand(const std::string appName);
+    Commander::CommandDescriptor* NewDeleteCommand(const std::string appName);
 }
 
 #endif

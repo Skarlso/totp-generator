@@ -8,11 +8,11 @@
 
 
 namespace Commands {
-  class GenerateCommand : public Commander::Command {
-    void Execute(Commander::ArgumentRegistry* args);
-  };
+    class GenerateCommand : public Commander::Command {
+        void Execute(Commander::ArgumentRegistry* args);
+    };
 
-  Commander::CommandDescriptor* NewGenerateCommand(const std::string appName);
+    Commander::CommandDescriptor* NewGenerateCommand(const std::string appName);
 }
 
 #endif
