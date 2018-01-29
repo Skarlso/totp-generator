@@ -1,24 +1,23 @@
-// Copyright [2016] <Gergely Brautigam>
+// Copyright [2016 - *] <Gergely Brautigam>
 #include "generator.hpp"
 #include <ctime>
 #include <cstdlib>
 #include <string>
+#include "commands/AddCommand.hpp"
+#include "commands/DeleteCommand.hpp"
+#include "commands/GenerateCommand.hpp"
+#include "commands/HelpCommand.hpp"
+#include <Commander/CommandRegistry.hpp>
 
 using std::string;
 
-int main()
+int main(int argc, const char *argv[])
 {
-    // Use the command library from Yitsushi?
-    // command -> create
-    // command -> generate
-    // command -> delete
-    TokenGenerator tg;
-    std::time_t timer = std::time(nullptr);
-    if(const char* env_p = std::getenv("OTP_TOKEN")) {
-        string token(env_p);
-        tg.generateOTPToken(token, timer);
-    } else {
-        printf("Please set your environment property 'OTP_TOKEN' to your token key.\n");
-    }
+    Commander::CommandRegistry* registry = new Commander::CommandRegistry(argc, argv);
+    registry->Register(&(Commands::NewAddCommand));
+    registry->Register(&(Commands::NewDeleteCommand));
+    registry->Register(&(Commands::NewGenerateCommand));
+    registry->Register(&(Commands::NewHelpCommand));
+    registry->Execute();
     return 0;
 }
