@@ -3,7 +3,7 @@
 A generator for TOTP based on RFC-6238.
 
 Original idea of implementing an RFC as a programming exercises by: [Yitsushi](https://github.com/Yitsushi).
-His implementation in Go can be found here: [Yitsushi](https://github.com/Yitsushi/totp-cli/).
+His implementation in Go can be found here: [Totp-cli](https://github.com/Yitsushi/totp-cli/).
 
 I did it C++ in order to learn and practice.
 
