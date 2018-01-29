@@ -19,7 +19,7 @@ Accounting::Accounting() {
     home /= Accounting::CONFIG_FOLDER;
     home /= Accounting::CONFIG_FILE;
     struct stat buffer;
-    if (stat (home.c_str(), &buffer) == 0) {
+    if (stat (home.c_str(), &buffer) != 0) {
         std::cout << "Creating config folder." << std::endl;
     } else {
         std::cout << "Config folder present." << std::endl;
