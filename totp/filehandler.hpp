@@ -13,6 +13,7 @@ public:
     void saveAccountFile(std::map<std::string, std::string> accountsToSave);
 private:
     boost::filesystem::path configLocation;
+    std::string password = "";
 };
 
 #endif
