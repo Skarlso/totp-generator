@@ -37,12 +37,8 @@ cmake -DOPENSSL_INCLUDE_DIR=/usr/local/Cellar/openssl/1.0.2j/include -DOPENSSL_R
 
 ### Running
 
-Totp-generator uses AES to encrypt an account file. In order to set a password
-to use for said file, set the following environment property:
-
-```bash
-export TOTP_KEY=mysecurepassword
-```
+Totp-generator uses AES to encrypt an account file. It does not use an IV as of right now, but that's in the works.
+Because the password is not stored anywhere and is always required to be entered, it should be safe.
 
 #### Commands
 
