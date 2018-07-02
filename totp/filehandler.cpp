@@ -20,6 +20,9 @@
 
 namespace fs = boost::filesystem;
 
+/**
+ * https://stackoverflow.com/a/1455007/362417
+ */
 void SetStdinEcho(bool enable = true)
 {
 #ifdef WIN32
