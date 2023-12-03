@@ -66,11 +66,15 @@ string TokenGenerator::generateOTPToken(string token, std::time_t t) {
     for(int i = 0; i < 20; i++)
         sprintf(&mdString[i*2], "%02x", (unsigned char)digest[i]);
 
-    int offset = digest[strlen((char*)digest)-1] & 0xf;
-	int value = (int)(((int(digest[offset]) & 0x7f) << 24) |
-		((int(digest[offset+1] & 0xff)) << 16) |
-		((int(digest[offset+2] & 0xff)) << 8) |
-		(int(digest[offset+3]) & 0xff));
+    // strlen ends early when hex value is /x00 aka null terminator, changed to hardcoded length 20
+    // int offset = digest[strlen((char*)digest)-1] & 0xf;
+    int offset = digest[20-1] & 0xf;
+
+    // mask after bit shifting left to avoid getting undefined behaviour
+    int value = (int)((((int(digest[offset])) << 24) & 0x7f000000) |
+                      (((int(digest[offset + 1])) << 16) & 0xff0000) |
+                      ((((int(digest[offset + 2])) << 8) & 0xff00)) |
+                      (int(digest[offset + 3]) & 0xff));
     int len = 6;
     int mod = value % int(pow(10, len));
     std::cout << std::setfill('0') << std::setw(6) << mod << std::endl;
